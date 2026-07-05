@@ -4,6 +4,7 @@ from django.conf import settings
 
 class Image(models.Model):
     file = models.ImageField(upload_to='annotation_images/')
+    order = models.PositiveIntegerField(default=0)
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -35,6 +36,7 @@ class Annotation(models.Model):
         related_name='annotations'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
