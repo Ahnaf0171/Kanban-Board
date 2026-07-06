@@ -40,15 +40,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login", ""]
             }
           },
           "response": []
@@ -86,16 +79,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login/refresh/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login",
-                "refresh",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login", "refresh", ""]
             }
           },
           "response": []
@@ -116,15 +101,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register", ""]
             }
           },
           "response": []
@@ -143,7 +121,7 @@
       "name": "Tasks",
       "item": [
         {
-          "name": "Create_task",
+          "name": "Task Create",
           "request": {
             "method": "GET",
             "header": []
@@ -175,24 +153,44 @@
           "response": []
         },
         {
-          "name": "task list",
+          "name": "Task list",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/tasks/?due_date=2026-07-06",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "tasks",
-                ""
-              ],
+              "raw": "{{base_url}}/api/tasks/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tasks", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "task delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tasks/1/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tasks", "1", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "task filter (date)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tasks/?due_date=2026-07-10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tasks", ""],
               "query": [
                 {
                   "key": "due_date",
-                  "value": "2026-07-06"
+                  "value": "2026-07-10"
                 }
               ]
             }
@@ -205,7 +203,7 @@
       "name": "Annotations",
       "item": [
         {
-          "name": "annotation(polygon)",
+          "name": "annotation create",
           "request": {
             "method": "POST",
             "header": [],
@@ -220,14 +218,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/annotations/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "annotations",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "annotations", ""]
             }
           },
           "response": []
@@ -239,24 +231,151 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/images/1/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "images",
-                "1",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "images", "1", ""]
             }
           },
           "response": []
         },
         {
-          "name": "delete annotation",
+          "name": "Delete annotation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/annotations/1/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "annotations", "1", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Image Upload",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "6855163c-76ea-481e-a2e6-90a1f234549f",
+                  "src": "/C:/Users/Ahnaf/Downloads/coach5.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/images/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "images", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Image List",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/images/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "images", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Image Retrieve",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/images/2/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "images", "2", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Image reorder",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"order\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/images/{id}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "images", "{id}", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "annotation update",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"label\": \"updated-label\",\r\n  \"points\": [\r\n    {\"x\": 8, \"y\": 12},\r\n    {\"x\": 42, \"y\": 12},\r\n    {\"x\": 22, \"y\": 52}\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/annotations/2/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "annotations", "2", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "tag list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tags/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tags", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Image invalid ownership",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"image\": 999,\r\n  \"points\": [\r\n    {\"x\": 1, \"y\": 1},\r\n    {\"x\": 2, \"y\": 2},\r\n    {\"x\": 3, \"y\": 3}\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/annotations/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "annotations", ""]
+            }
           },
           "response": []
         }
@@ -280,9 +399,7 @@
         "type": "text/javascript",
         "packages": {},
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
@@ -291,9 +408,7 @@
         "type": "text/javascript",
         "packages": {},
         "requests": {},
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ]
