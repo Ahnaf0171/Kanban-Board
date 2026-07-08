@@ -2,13 +2,11 @@ from rest_framework import serializers
 from django.utils import timezone
 from .models import Task, Tag
 
-
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color')
         read_only_fields = ('id',)
-
 
 class TaskSerializer(serializers.ModelSerializer):
     tags = serializers.ListField(
@@ -67,13 +65,6 @@ class TaskSerializer(serializers.ModelSerializer):
             self._sync_tags(instance, tag_names)
         return instance
 
-
 class TaskReorderSerializer(serializers.Serializer):
     status = serializers.ChoiceField(choices=Task.STATUS_CHOICES)
     order = serializers.IntegerField(min_value=0)
-
-    def update(self, instance, validated_data):
-        instance.status = validated_data['status']
-        instance.order = validated_data['order']
-        instance.save(update_fields=['status', 'order', 'updated_at'])
-        return instance
