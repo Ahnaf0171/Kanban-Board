@@ -179,10 +179,11 @@ SIMPLE_JWT = {
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-CORS_ALLOWED_ORIGINS = config(
-    'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:3000'
-).split(',')
+CCORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
