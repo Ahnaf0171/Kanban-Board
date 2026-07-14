@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.utils import timezone
 from .models import Task, Tag
+from django.db import transaction
+from django.db.models import Max
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,7 +55,18 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         tag_names = validated_data.pop('tags', [])
-        task = Task.objects.create(user=self.context['request'].user, **validated_data)
+        user = self.context['request'].user
+        status = validated_data.get('status', 'todo')
+
+        with transaction.atomic():
+            last_order = (
+                Task.objects.select_for_update()
+                .filter(user=user, status=status)
+                .aggregate(max_order=Max('order'))['max_order']
+            )
+            validated_data['order'] = 0 if last_order is None else last_order + 1
+            task = Task.objects.create(user=user, **validated_data)
+
         if tag_names:
             self._sync_tags(task, tag_names)
         return task

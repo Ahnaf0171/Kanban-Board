@@ -179,7 +179,7 @@ SIMPLE_JWT = {
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-CCORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",")
     if origin.strip()
