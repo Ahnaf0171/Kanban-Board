@@ -13,10 +13,17 @@ class Image(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-uploaded_at']  
+        ordering = ['-uploaded_at']
 
     def __str__(self):
         return f"Image #{self.id} by {self.uploaded_by.email}"
+
+    def delete(self, *args, **kwargs):
+        file_to_remove = self.file
+        result = super().delete(*args, **kwargs)
+        if file_to_remove:
+            file_to_remove.delete(save=False)
+        return result
 
 
 class Annotation(models.Model):

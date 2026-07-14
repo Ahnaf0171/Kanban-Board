@@ -1,8 +1,10 @@
+import re
 from rest_framework import serializers
 from .models import Image, Annotation
 
 MAX_IMAGE_SIZE_MB = 5
 ALLOWED_IMAGE_TYPES = ('image/jpeg', 'image/png', 'image/webp')
+HEX_COLOR_PATTERN = re.compile(r'^#(?:[0-9a-fA-F]{3}){1,2}$')
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
@@ -10,6 +12,12 @@ class AnnotationSerializer(serializers.ModelSerializer):
         model = Annotation
         fields = ('id', 'image', 'points', 'label', 'color', 'created_by', 'created_at')
         read_only_fields = ('id', 'created_by', 'created_at')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        if request is not None and 'image' in self.fields:
+            self.fields['image'].queryset = Image.objects.filter(uploaded_by=request.user)
 
     def validate_points(self, value):
         if not isinstance(value, list) or len(value) < 3:
@@ -21,10 +29,9 @@ class AnnotationSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Point coordinates must be numbers.")
         return value
 
-    def validate_image(self, value):
-        request = self.context['request']
-        if value.uploaded_by_id != request.user.id:
-            raise serializers.ValidationError("You can only annotate your own images.")
+    def validate_color(self, value):
+        if value and not HEX_COLOR_PATTERN.match(value):
+            raise serializers.ValidationError("Color must be a valid hex code, e.g. '#FF0000' or '#F00'.")
         return value
 
     def create(self, validated_data):

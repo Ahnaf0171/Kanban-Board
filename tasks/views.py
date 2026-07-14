@@ -2,6 +2,7 @@ from datetime import datetime
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import Task, Tag
 from .serializers import TaskSerializer, TagSerializer, TaskReorderSerializer
@@ -66,7 +67,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Response(TaskSerializer(task, context={'request': request}).data)
 
 
+class TagPagination(PageNumberPagination):
+    page_size = 500
+
+
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = TagPagination
