@@ -1,4 +1,6 @@
 import logging
+import sys
+import traceback
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,6 +25,14 @@ def custom_exception_handler(exc, context):
         return Response({"success": False, "error": {"message": "Permission denied."}}, status=status.HTTP_403_FORBIDDEN)
     if isinstance(exc, DjangoValidationError):
         return Response({"success": False, "error": {"message": str(exc)}}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Unhandled error: Render Logs e asol karon dekhar jonno
+    request = context.get("request")
+    print(
+        f"UNHANDLED ERROR on {getattr(request, 'method', '?')} {getattr(request, 'path', '?')}",
+        file=sys.stderr,
+    )
+    traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
 
     logger.exception("Unhandled exception: %s", exc)
     return Response({"success": False, "error": {"message": "Something went wrong."}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
